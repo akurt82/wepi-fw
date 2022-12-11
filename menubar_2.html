@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>.</title>
+		<meta charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="wepi_menubar.js"></script>
+		<style>
+			html, body 
+			{
+				margin: 0;
+				padding: 0;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id = "mbar"></div>
+		<div id = "test"></div>
+		<script>
+			wepi_menubar.style = "mymenu";
+			wepi_menubar.bar.position = "fixed";
+			wepi_menubar.bar.dock = "top";
+			let r = wepi_menubar.create(
+				'body',
+				wepi_menubar.newbar(
+					wepi_menubar.root( 1, "File", 
+						wepi_menubar.popup(
+							4, [1, 4], "New File", "imgs/code.png",
+							wepi_menubar.item( "open1", "Text File", "", "c" ) +
+							wepi_menubar.separator() +
+							wepi_menubar.popup( 5, [1, 4, 5], "HTML File", "imgs/computer.png",
+								wepi_menubar.item( "open2.1", "Static", "imgs/customers.png", "c" ) +
+								wepi_menubar.item( "open2.2", "Dynamic", "imgs/database_gear.png", "c" ) +
+								wepi_menubar.item( "open2.3", "Server&nbsp;Specific&nbsp;Build", "imgs/flag_red.png", "c" )
+							) +
+							wepi_menubar.item( "open3", "XML File", "", "c" ) +
+							wepi_menubar.separator() +
+							wepi_menubar.item( "open4", "CSS File", "", "c" ) +
+							wepi_menubar.separator() +
+							wepi_menubar.item( "open5", "JavaScript File", "", "c" )
+						) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "open", "Open File", "imgs/design.png", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "save", "Save", "imgs/filesave.png", "c" ) +
+						wepi_menubar.item( "saveas", "Save As...", "", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "quit", "Quit Window", "", "c" )
+					) +
+					wepi_menubar.root( 2, "Edit", 
+						wepi_menubar.item( "cut", "Cut", "imgs/cut.png", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "copy", "Copy", "imgs/copy.png", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "paste", "Paste", "imgs/edit_paste.png", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "delete", "Remove", "", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "selectall", "Select All", "", "c" )
+					) +
+					wepi_menubar.root( 3, "View", 
+						wepi_menubar.item( "info", "Info", "imgs/emblem_library.png", "c" ) +
+						wepi_menubar.separator() +
+						wepi_menubar.item( "guide", "Guide", "imgs/book2.png", "c" )
+					)
+					,
+					""
+				)
+			);
+			$("#test").html('<textarea style = "width:100%;height:300px;">'+r+'</textarea>');
+			//$("#mymenu").width(200);
+		</script>
+	</body>
+</html>

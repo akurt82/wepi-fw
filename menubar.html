@@ -1,0 +1,593 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>.</title>
+		<meta charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<style>
+			html, body
+			{
+				margin: 0;
+				padding: 0;
+			}
+		
+			.menubar
+			{
+				font-family: Arial;
+				font-size: 12px;
+				background-color: rgb(200,200,200);
+				box-shadow: 4px 4px 4px rgba(0,0,0,0.15);
+			}
+			.menubar .menuber-outer
+			{
+				background-color: rgba(200,200,200,0.95);
+				border-right: 1px solid rgba(160, 160, 160,0.8);
+				border-bottom: 1px solid rgba(160, 160, 160,0.8);
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+			}
+			.menubar .menubar-inner
+			{
+				padding: 2px;
+				border: 1px solid rgba(255,255,255,0.8);
+				border-right: 1px solid rgba(180, 180, 180,0.8);
+				border-bottom: 1px solid rgba(180, 180, 180,0.8);
+				justify-content: space-between;
+				display: flex;
+			}
+
+			.menubar .left, .menubar .right
+			{
+				display: flex;
+			}
+			.menubar hr
+			{
+				border: none;
+				border-top: 1px solid rgb(160,160,160);
+				border-bottom: 1px solid #FFF;
+				margin: 0 10%;
+				margin-top: 2px;
+				margin-bottom: 2px;
+			}
+			.menubar .root, .menubar .popup .list .item,
+			.menubar .hroot, .menubar .popup .list .hitem
+			{
+				padding: 8px;
+				cursor: pointer;
+				text-align: left;
+			}
+			.menubar .popup .root, .menubar .popup .hroot
+			{
+				padding: 8px;
+				cursor: pointer;
+				text-align: left;
+				width: 100%;
+			}
+			.menubar .root:hover, .menubar .popup .root:hover, .menubar .popup .list .item:hover,
+			.menubar .hroot, .menubar .popup .hroot, .menubar .popup .list .hitem
+			{
+				text-shadow: 4px 4px 4px rgba(0,0,0,0.3);
+				background-color: rgb(100,120,140);
+				box-shadow: inset 4px 4px 4px rgba(0,0,0,0.08);
+				vertical-align: middle;
+				align-items: center;
+				color: #FFF;
+			}
+			.menubar .root img, .menubar .popup .list .item img,
+			.menubar .hroot img, .menubar .popup .list .hitem img,
+			.menubar .root:hover img, .menubar .popup .root:hover img, 
+			.menubar .popup .list .item:hover img,
+			.menubar .hroot img, .menubar .popup .hroot img, 
+			.menubar .popup .list .hitem img
+			{
+				margin-right: 12px;
+				max-height: 28px;
+			}
+			.menubar .popup .root, .menubar .popup .hroot
+			{
+				display: flex;
+				justify-content: space-between;
+				vertical-align: middle;
+				align-items: center;
+			}
+			.menubar .popup .root div:nth-child(2), .menubar .popup .hroot div:nth-child(2),
+			.menubar .popup .item div:nth-child(2), .menubar .popup .hitem div:nth-child(2)
+			{
+				text-align: left;
+				align-items: center;
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+			}
+			.menubar .popup .root div:nth-child(2) span:nth-child(2), 
+			.menubar .popup .hroot div:nth-child(2) span:nth-child(2),
+			.menubar .popup .item div:nth-child(2) span:nth-child(2), 
+			.menubar .popup .hitem div:nth-child(2) span:nth-child(2)
+			{
+				width: 0;
+				margin-top: 5px;
+				margin-bottom: 5px;
+			}
+			.menubar .popup .item
+			{
+				display: flex;
+				text-align: left;
+				padding-right: 30px;
+			}
+			.menubar .popup .item .ico
+			{
+				margin: 0;
+				padding: 0;
+				margin-right: 12px;
+				width: 20px;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				vertical-align: middle;
+			}
+			.menubar .popup .item .ety
+			{
+				margin: 0;
+				padding: 0;
+				text-align: left;
+				vertical-align: middle;
+			}
+			.menubar .popup .root .sparrow, .menubar .popup .hroot .sparrow
+			{
+				width: 0;
+				height: 0;
+				border-top: 6px solid transparent;
+				border-bottom: 6px solid transparent;
+				border-left: 6px solid #000;
+				margin-top: auto;
+				margin-bottom: auto;
+			}
+			.menubar .popup .root .sharrow, .menubar .popup .hroot .sharrow
+			{
+				width: 0;
+				height: 0;
+				border-top: 6px solid transparent;
+				border-bottom: 6px solid transparent;
+				border-left: 6px solid #FFF;
+				margin-top: auto;
+				margin-bottom: auto;
+			}
+			.menubar .popup .root:hover .sparrow, .menubar .popup .hroot:hover .sparrow
+			{
+				width: 0;
+				height: 0;
+				border-top: 6px solid transparent;
+				border-bottom: 6px solid transparent;
+				border-left: 6px solid #FFF;
+			}
+			.menubar .popup
+			{
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+			}
+			.menubar .popup .list
+			{
+				position: absolute;
+				background-color: rgba(200,200,200,0.95);
+				padding: 0px 0px;
+				margin: 0px 0px;
+				padding-top: 1px;
+				padding-left: 1px;
+				border-right: 1px solid rgba(160, 160, 160,0.8);
+				border-bottom: 1px solid rgba(160, 160, 160,0.8);
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+				min-width: 160px;
+				box-shadow: 4px 4px 4px rgba(0,0,0,0.15);
+			}
+			.menubar .popup .list .inner
+			{
+				margin: 0px 0px;
+				padding: 2px;
+				border: 1px solid rgba(255,255,255,0.8);
+				border-right: 1px solid rgba(180, 180, 180,0.8);
+				border-bottom: 1px solid rgba(180, 180, 180,0.8);				
+				border-bottom-left-radius: 4px;
+				border-bottom-right-radius: 4px;
+			}
+			.menubar .popup .list .inner .lipanel
+			{
+				max-height: 400px;
+				overflow: auto;
+			}
+			.menubar .right .popup .root, .menubar .right .popup .hroot
+			{
+				direction: ltr;
+			}
+			.menubar .popup .subpopup
+			{
+				display: flex;
+				justify-content: space-between;
+			}
+			.menubar .right .popup
+			{
+				direction: rtl;
+			}
+			.menubar .popup .root div:nth-child(2), 
+			.menubar .popup .hroot div:nth-child(2),
+			.menubar .popup .item div:nth-child(2), 
+			.menubar .popup .hitem div:nth-child(2)
+			{
+				direction: ltr;
+				text-align: left;
+				width: 100%;
+			}
+			@media only screen and (max-width: 560px) {
+				.menubar
+				{
+					box-shadow: none;
+				}
+ 				.menubar .menubar-inner
+				{
+					padding: 2px;
+					border: 1px solid rgba(255,255,255,0.8);
+					border-right: 1px solid rgba(180, 180, 180,0.8);
+					border-bottom: 1px solid rgba(180, 180, 180,0.8);
+					justify-content: space-between;
+					display: block;
+				}
+				.menubar .left, .menubar .right
+				{
+					display: block;
+				}
+				.menubar .popup .list
+				{
+					position: static;
+					min-width: auto;
+					overflow-x: hidden;
+					box-shadow: none;
+				}
+				.menubar .popup .subpopup
+				{
+					display: block;
+					justify-content: space-between;
+					overflow-x: hidden;
+					box-shadow: none;
+				}
+				.menubar .right .popup
+				{
+					direction: ltr;
+				}
+			}
+
+/*
+@media only for screen and (max-width: 480px) {
+ 
+}
+
+@media only screen and (min-width: 200px) and (max-width: 600px) {
+ 
+}*/
+		</style>
+		<script>
+			let popup_locked = 0;
+			// *** //
+			function popup ( idno )
+			{
+				if ( popup_locked == 1 )
+				{
+					popup_locked = 0;
+				}
+				else
+				{
+				let e;
+				let ee;
+				// *** //
+				for ( let i = 0; i < 256; i++ )
+				{
+					e = document.getElementById("m" + i);
+					// *** //
+					ee = document.getElementById("_m" + i);
+					// *** //
+					if( typeof(e) != 'undefined' && e != null && e.id != idno )
+					{
+						$(e).fadeOut("fast");
+						// *** //
+						if ( $(ee).hasClass( "hroot" ) )
+						{
+							$(ee).removeClass('hroot').addClass('root');
+						}
+						// *** //
+						if ( $(ee).hasClass( "hitem" ) )
+						{
+							$(ee).removeClass('hitem').addClass('item');
+						}
+					}
+				}
+				// *** //
+				$("#" + idno).fadeToggle("fast");
+				$("#" + idno).css('box-shadow', '10px 10px 5px #888');
+				// *** //
+				if ( $("#_" + idno).hasClass( "root" ) )
+				{
+					$("#_" + idno).removeClass('root').addClass('hroot');
+				}
+				// *** //
+				if ( $("#_" + idno).hasClass( "item" ) )
+				{
+					$("#_" + idno).removeClass('item').addClass('hitem');
+				}
+				}
+			}
+			function subpopup ()
+			{
+				if ( popup_locked == 1 )
+				{
+					popup_locked = 0;
+				}
+				else
+				{
+				let ok = 0;
+				// *** //
+				for ( let i = 0; i < 256; i++ )
+				{
+					e = document.getElementById("m" + i);
+					// *** //
+					ee = document.getElementById("_m" + i);
+					// *** //
+					if( typeof(e) != 'undefined' && e != null )
+					{
+						ok = 0;
+						// *** //
+						for ( let x = 0; x < arguments.length; x++ )
+						{
+							if ( e.id != arguments[x] ) {ok = 1; break;}
+						}
+						// *** //
+						if ( ok == 0 )
+						{
+							$(e).fadeOut("fast");
+							// *** //
+							if ( $(ee).hasClass( "hroot" ) )
+							{
+								$(ee).removeClass('hroot').addClass('root');
+							}
+							// *** //
+							if ( $(ee).hasClass( "hitem" ) )
+							{
+								$(ee).removeClass('hitem').addClass('item');
+							}
+						}
+					}
+				}
+				// *** //
+				for ( let x = 0; x < arguments.length; x++ )
+				{
+					$("#" + arguments[x]).fadeIn("fast");
+					// *** //
+					if ( $("#_" + arguments[x]).hasClass( "root" ) )
+					{
+						$("#_" + arguments[x]).removeClass('root').addClass('hroot');
+					}
+					// *** //
+					if ( $("#_" + arguments[x]).hasClass( "item" ) )
+					{
+						$("#_" + arguments[x]).removeClass('item').addClass('hitem');
+					}
+				}
+				}
+			}
+			function hidepopups ()
+			{
+				if ( arguments.length > 0 )
+				{
+					for ( let x = 0; x < arguments.length; x++ )
+					{
+						$("#" + arguments[x]).fadeOut("fast");
+						// *** //
+						if ( $("#_" + arguments[x]).hasClass( "hroot" ) )
+						{
+							$("#_" + arguments[x]).removeClass('hroot').addClass('root');
+						}
+						// *** //
+						if ( $("#_" + arguments[x]).hasClass( "hitem" ) )
+						{
+							$("#_" + arguments[x]).removeClass('hitem').addClass('item');
+						}
+					}
+				}
+				else
+				{
+					for ( let i = 0; i < 256; i++ )
+					{
+						let e = document.getElementById("m" + i);
+						// *** //
+						let ee = document.getElementById("_m" + i);
+						// *** //
+						if( typeof(e) != 'undefined' && e != null )
+						{
+							$(e).fadeOut("fast");
+							// *** //
+							if ( $(ee).hasClass( "hroot" ) )
+							{
+								$(ee).removeClass('hroot').addClass('root');
+							}
+							// *** //
+							if ( $(ee).hasClass( "hitem" ) )
+							{
+								$(ee).removeClass('hitem').addClass('item');
+							}
+						}
+					}
+				}
+			}
+			function mclicked( key )
+			{
+				hidepopups();
+				popup_locked = 1;
+				$("#test").html(key);
+			}
+		</script>
+	</head>
+	<body onmouseup = "hidepopups();">
+
+	<div class = "menubar">
+	<div class = "menubar-outer">
+	<div class = "menubar-inner">
+		<div class = "left">
+			<div onclick = "popup('m1');">
+				<div class = "root" id = "_m1">Datei</div>
+				<div class = "popup" id = "m1" style = "display: none;">
+					<div class = "list">
+						<div class = "inner">
+							<div class = "lipanel">
+								<div class = "item" onclick = "mclicked('new');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Neu</div>
+								</div>
+								<div class = "item" onclick = "mclicked('open');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Öffnen</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div class = "item" onclick = "mclicked('save');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Speichern</div>
+								</div>
+								<div class = "item" onclick = "mclicked('saveas');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Speichern unter...</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div class = "item" onclick = "mclicked('quit');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Beenden</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div onclick = "popup('m2');">
+				<div class = "root" id = "_m2">Bearbeiten</div>
+				<div class = "popup" id = "m2" style = "display: none;">
+					<div class = "list">
+						<div class = "inner">
+							<div class = "lipanel">
+								<div class = "item" onclick = "mclicked('undo');" onmouseover = "hidepopups('m4');">
+									<div class = "ico"><img src = "imgs/appfolders.png"></div>
+									<div class = "ety">Rückgängig</div>
+								</div>
+								<div class = "item" onclick = "mclicked('redo');" onmouseover = "hidepopups('m4');">
+									<div class = "ico"><img src = "imgs/basket_links.png"></div>
+									<div class = "ety">Wiederherstellen</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div class = "item" onclick = "mclicked('cut');" onmouseover = "hidepopups('m4');">
+									<div class = "ico"><img src = "imgs/cut.png"></div>
+									<div class = "ety">Ausschneiden</div>
+								</div>
+								<div 
+									onmouseover = "subpopup('m4', 'm2');" 
+									class = "subpopup">
+									<div class = "root" id = "_m4">
+										<div class = "ico"><img src = "imgs/copy.png"></div>
+										<div class = "ety"><span>Kopieren</span> <span id = "sparrow" class = "sparrow">&nbsp;</span></div>
+									</div>
+									<div class = "popup" id = "m4" style = "display: none;">
+										<div class = "list">
+											<div class = "inner">
+												<div class = "lipanel">
+													<div class = "item" onclick = "mclicked('copy');">
+														<div class = "ico"><img src = "imgs/copy.png"></div>
+														<div class = "ety">Kopieren</div>
+													</div>
+													<hr>
+													<div class = "item" onclick = "mclicked('duplicate');">
+														<div class = "ico"><img src = "imgs/files.png"></div>
+														<div class = "ety">Duplizieren</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class = "item" onclick = "mclicked('paste');" onmouseover = "hidepopups('m4');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Einfügen</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div class = "item" onclick = "mclicked('remove');" onmouseover = "hidepopups('m4');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Löschen</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div class = "item" onclick = "mclicked('selectall');" onmouseover = "hidepopups('m4');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Alles markieren</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class = "right">
+			<div onclick = "popup('m3');">
+				<div class = "root" id = "_m3">Hilfe</div>
+				<div class = "popup" id = "m3" style = "display: none;">
+					<div class = "list">
+						<div class = "inner">
+							<div class = "lipanel">
+								<div class = "item" onclick = "mclicked('info');" onmouseover = "hidepopups('m5');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Info</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div onmouseover = "subpopup('m5', 'm3');" class = "subpopup">
+									<div class = "root" id = "_m5">
+										<div class = "ico">&nbsp;</div>
+										<div class = "ety"><span>Referenzen</span> <span id = "sparrow" class = "sparrow">&nbsp;</span></div>
+									</div>
+									<div class = "popup" id = "m5" style = "display: none;">
+										<div class = "list">
+											<div class = "inner">
+												<div class = "lipanel">
+													<div class = "item" onclick = "mclicked('int');">
+														<div class = "ico">&nbsp;</div>
+														<div class = "ety">Interessant</div>
+													</div>
+													<hr onmousedown = "hidepopups();">
+													<div class = "item" onclick = "mclicked('mul');">
+														<div class = "ico">&nbsp;</div>
+														<div class = "ety">Vielseitig</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<hr onmousedown = "hidepopups();">
+								<div class = "item" onclick = "mclicked('guide');" onmouseover = "hidepopups('m5');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Handbuch</div>
+								</div>
+								<div class = "item" onclick = "mclicked('online');" onmouseover = "hidepopups('m5');">
+									<div class = "ico">&nbsp;</div>
+									<div class = "ety">Online Support</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+
+	<div id = "test" style = "margin-top: 300px; margin-left: 20px;">
+		test
+	</div>
+
+	<script>
+    	wepi_menubar.create();
+	</script>
+
+	</body>
+</html>
